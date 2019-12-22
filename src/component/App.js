@@ -2,8 +2,8 @@ import React from 'react';
 import InformationLeft from './Left/InformationLeft'
 import InformationRight from './Right/InformationRight'
 
-class App extends React.Component{
-  constructor(props){
+class App extends React.Component {
+  constructor(props) {
     super(props);
     this.handleMakeGroup = this.handleMakeGroup.bind(this);
     this.handleSelectGroup = this.handleSelectGroup.bind(this);
@@ -11,103 +11,91 @@ class App extends React.Component{
     this.handleShowAll = this.handleShowAll.bind(this);
     this.handleAddTodolistElement = this.handleAddTodolistElement.bind(this);
     this.state = {
-      list : null,
-      currentgroup : null,
-      grouplist : null,
+      list: null,
+      currentgroup: null,
+      grouplist: null,
       currentgroupTodoList: null
     }
   }
 
-  handleMakeGroup(e){
-    if(CheckEnter(e)){
-      if(this.state.grouplist){
+  handleMakeGroup(e) {
+    if (CheckEnter(e)) {
+      if (this.state.grouplist) {
         this.setState({
           grouplist: this.state.grouplist.concat([e.target.value])
         })
-      }else{
+      } else {
         this.setState({
           grouplist: [e.target.value]
         })
       }
-      
+
     }
   }
-  handleSelectGroup(groupname){
+  handleSelectGroup(groupname) {
+
     console.log(groupname);
     //currentgroupTodoList 바꿔줘야 한다
     let newlist = [];
-    if(this.state.list){
+    if (this.state.list) {
       newlist = this.state.list.filter(TodolistElement => TodolistElement.group === groupname);
       this.setState({
-        currentgroup:groupname,
-        currentgroupTodoList : newlist
-      })
-    }else{
-      this.setState({
-        currentgroup:groupname
+        currentgroup: groupname,
+        currentgroupTodoList: newlist
       })
     }
-    
+    // 처음 그룹을 추가하는 경우
+    else {
+      this.setState({
+        currentgroup: groupname
+      })
+    }
+
   }
-  handleSearchTodoList(e){
+  handleSearchTodoList(e) {
     console.log(e.target.value);
   }
-  handleShowAll(){
+  handleShowAll() {
     console.log('Button is working');
   }
-  handleAddTodolistElement(e){
-    if(CheckEnter(e)){
+  handleAddTodolistElement(e) {
+    if (CheckEnter(e)) {
       //currentgroupTodoList를 수정해준다
-      let newElement = {
-        message: e.target.value,
-        group: this.state.currentgroup
-      }
-
-      if(this.state.currentgroupTodoList){
+      if (this.state.currentgroup) {
+        let newElement = {
+          message: e.target.value,
+          group: this.state.currentgroup
+        }
         this.setState({
-          list: this.state.list.concat(newElement),
-          currentgroupTodoList: this.state.currentgroupTodoList.concat(newElement)
+          list: this.state.list ? this.state.list.concat(newElement) : [newElement],
+          currentgroupTodoList: this.state.currentgroupTodoList ? this.state.currentgroupTodoList.concat(newElement) : [newElement]
         })
       }
-      else{
-        if(this.state.list){
-          this.setState({
-            list: this.state.list.concat(newElement),
-            currentgroupTodoList: [newElement]
-          })
-        }else{
-          this.setState({
-            list: [newElement],
-            currentgroupTodoList: [newElement]
-          })
-        }
-      }
-      
     }
   }
-  render(){
+  render() {
     let state = this.state;
     console.log(state);
-    return(
+    return (
       <div id='app'>
         <InformationLeft
-            grouplist={state.grouplist}
-            currentgroup={state.currentgroup}
-            handleMakeGroup={this.handleMakeGroup}
-            handleSelectGroup={this.handleSelectGroup}
-            handleSearchTodoList={this.handleSearchTodoList}
-            handleShowAll={this.handleShowAll}/>
+          grouplist={state.grouplist}
+          currentgroup={state.currentgroup}
+          handleMakeGroup={this.handleMakeGroup}
+          handleSelectGroup={this.handleSelectGroup}
+          handleSearchTodoList={this.handleSearchTodoList}
+          handleShowAll={this.handleShowAll} />
         <InformationRight
-            currentgroup={state.currentgroup}
-            currentgroupTodoList={state.currentgroupTodoList}
-            handleAddTodolistElement={this.handleAddTodolistElement}/>
+          currentgroup={state.currentgroup}
+          currentgroupTodoList={state.currentgroupTodoList}
+          handleAddTodolistElement={this.handleAddTodolistElement} />
       </div>
     )
   }
 }
 
 
-function CheckEnter(e){
-  return e.keyCode===13 ? true : false
+function CheckEnter(e) {
+  return e.keyCode === 13 ? true : false
 }
 export default App;
